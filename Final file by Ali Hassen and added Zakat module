@@ -1,0 +1,334 @@
+#include <iostream>
+#include <conio.h>
+#include <windows.h>
+using namespace std;
+
+class Banking
+{
+protected:
+    int completed;
+    string ID, account;
+    struct customer
+    {
+        string id, name, father_name, addres;
+        double phone, cash, idcard;
+    } customer[100];
+
+public:
+    Banking()
+    {
+        completed = 0;
+    }
+    void showoptions();
+    void newaccount();
+    void display();
+    void update();
+    void search();
+    void transaction();
+    void logout();
+    int getCustomerIndexById(string id)
+    {
+        for (int i = 0; i < completed; i++)
+        {
+            if (customer[i].id == id)
+                return i;
+        }
+        return -1;
+    }
+    double getCustomerCash(int index)
+    {
+        if (index >= 0 && index < completed)
+            return customer[index].cash;
+        return 0;
+    }
+};
+
+class zakatClass : public Banking
+{
+public:
+    void zakat()
+    {
+        string id;
+        cout << "Enter customer ID for zakat calculation: ";
+        cin >> id;
+        int index = getCustomerIndexById(id);
+        if (index != -1)
+        {
+            double cash = getCustomerCash(index);
+            if (cash > 100000)
+            {
+                double zakatAmount = cash * 0.025;
+                int cash2 = cash - zakatAmount;
+                cout << "Zakat for customer " << customer[index].name << " (ID: " << id << ") is: " << zakatAmount << endl;
+                cout<<"Your new balance for this Year: "<<cash2<<endl;
+            }
+            else
+            {
+                cout << "Customer does not have enough balance for zakat." << endl;
+            }
+        }
+        else
+        {
+            cout << "Customer not found!" << endl;
+        }
+    }
+};
+
+void Banking::showoptions()
+{
+    char select;
+    while (true)
+    {
+        cout << "\nPress 1 for creating New account." << endl;
+        cout << "Press 2 for displaying the customer Information" << endl;
+        cout << "Press 3 for updating customer information" << endl;
+        cout << "Press 4 for searching the specific Customer" << endl;
+        cout << "Press 5 for transaction operations like deposit and withdraw" << endl;
+        cout << "Press 6 for zakat calculation" << endl;
+        cout << "Press 7 for log out" << endl;
+
+        select = getch();
+        switch (select)
+        {
+        case '1':
+            system("CLS");
+            newaccount();
+            break;
+        case '2':
+            system("CLS");
+            display();
+            break;
+        case '3':
+            system("CLS");
+            update();
+            break;
+        case '4':
+            system("CLS");
+            search();
+            break;
+        case '5':
+            system("CLS");
+            transaction();
+            break;
+        case '6':
+        {
+            system("CLS");
+            zakatClass zs;
+            // Copy customers to zakatClass object
+            zs.completed = completed;
+            for (int i = 0; i < completed; i++)
+                zs.customer[i] = customer[i];
+            zs.zakat();
+            break;
+        }
+        case '7':
+            system("CLS");
+            logout();
+            break;
+        default:
+            cout << "Invalid option. Try again." << endl;
+        }
+    }
+}
+
+void Banking::newaccount()
+{
+    cout << "\n\n\t\t\t\tNEW ACCOUNT CREATING..\t\t\n\n";
+    cout << "Enter the Record for Customer " << completed + 1 << endl;
+    cout << "Enter id: ";
+    cin >> customer[completed].id;
+    cout << "Enter Name: ";
+    cin >> customer[completed].name;
+    cout << "Enter Father Name: ";
+    cin >> customer[completed].father_name;
+    cout << "Enter ID CARD NUMBER: ";
+    cin >> customer[completed].idcard;
+    cout << "Enter Phone Number: ";
+    cin >> customer[completed].phone;
+    cout << "Enter Cash: ";
+    cin >> customer[completed].cash;
+    completed++;
+}
+
+void Banking::display()
+{
+    for (int i = 0; i < completed; i++)
+    {
+        cout << "Record of Customer " << i + 1 << endl;
+        cout << "Customer Unique ID: " << customer[i].id << endl;
+        cout << "Customer Name: " << customer[i].name << endl;
+        cout << "Customer Father Name: " << customer[i].father_name << endl;
+        cout << "Customer Phone No: " << customer[i].phone << endl;
+        cout << "Customer ID card: " << customer[i].idcard << endl;
+        cout << "Customer Amount: " << customer[i].cash << endl;
+        cout << "----------------------------------------" << endl;
+    }
+}
+
+void Banking::update()
+{
+    cout << "Enter the id of the customer: ";
+    cin >> ID;
+    int idx = getCustomerIndexById(ID);
+    if (idx != -1)
+    {
+        cout << "\n\n\t\t\t\tRecord of Existing Customer\t\t\t\n\n";
+        cout << "Customer Unique ID: " << customer[idx].id << endl;
+        cout << "Customer Name: " << customer[idx].name << endl;
+        cout << "Customer Father Name: " << customer[idx].father_name << endl;
+        cout << "Customer Phone No: " << customer[idx].phone << endl;
+        cout << "Customer ID card: " << customer[idx].idcard << endl;
+        cout << "Customer Amount: " << customer[idx].cash << endl;
+
+        cout << "\n\n\t\t\t\tUPDATING THE CUSTOMER RECORD..\t\t\n\n";
+        cout << "Enter id: ";
+        cin >> customer[idx].id;
+        cout << "Enter Name: ";
+        cin >> customer[idx].name;
+        cout << "Enter Father Name: ";
+        cin >> customer[idx].father_name;
+        cout << "Enter ID CARD NUMBER: ";
+        cin >> customer[idx].idcard;
+        cout << "Enter Phone Number: ";
+        cin >> customer[idx].phone;
+        cout << "Enter Cash: ";
+        cin >> customer[idx].cash;
+    }
+    else
+    {
+        cout << "Customer not found!" << endl;
+    }
+}
+
+void Banking::search()
+{
+    cout << "\n\n\t\tEnter the id --FOR SEARCHING-- the customer\t\t\n\n";
+    cin >> ID;
+    int idx = getCustomerIndexById(ID);
+    if (idx != -1)
+    {
+        cout << "\n\n\t\t\t\tRecord of Existing Customer\t\t\t\n\n";
+        cout << "Customer Unique ID: " << customer[idx].id << endl;
+        cout << "Customer Name: " << customer[idx].name << endl;
+        cout << "Customer Father Name: " << customer[idx].father_name << endl;
+        cout << "Customer Phone No: " << customer[idx].phone << endl;
+        cout << "Customer ID card: " << customer[idx].idcard << endl;
+        cout << "Customer Amount: " << customer[idx].cash << endl;
+    }
+    else
+    {
+        cout << "Customer not found!" << endl;
+    }
+}
+
+void Banking::transaction()
+{
+    char select;
+    double mony;
+    cout << "\n\n\t\tEnter the id --FOR TRANSACTION-- the customer\t\t\n\n";
+    cin >> ID;
+    int idx = getCustomerIndexById(ID);
+    if (idx != -1)
+    {
+        cout << "Customer Unique ID: " << customer[idx].id << endl;
+        cout << "Customer Name: " << customer[idx].name << endl;
+        cout << "Customer Amount: " << customer[idx].cash << endl;
+        cout << "\n\n\t\t 1.For Deposit " << endl;
+        cout << "\n\n\t\t 2.For Withdraw " << endl;
+        select = getch();
+        switch (select)
+        {
+        case '1':
+            cout << "ENTER AMOUNT FOR DEPOSIT" << endl;
+            cin >> mony;
+            cout << "\n\n\t\t\tYour request is being processed";
+            for (int a = 0; a < 5; a++)
+            {
+                cout << ".";
+                Sleep(200);
+            }
+            cout << "\nTRANSACTION is successful" << endl;
+            customer[idx].cash += mony;
+            cout << "NEW BALANCE IN ACCOUNT NUMBER " << customer[idx].id << " IS = " << customer[idx].cash << endl;
+            break;
+        case '2':
+            while (true)
+            {
+                cout << "ENTER AMOUNT FOR WITHDRAW" << endl;
+                cin >> mony;
+                if (mony <= customer[idx].cash)
+                {
+                    cout << "\n\n\t\t\tYour request is being processed";
+                    for (int a = 0; a < 5; a++)
+                    {
+                        cout << ".";
+                        Sleep(200);
+                    }
+                    cout << "\nTRANSACTION is successful" << endl;
+                    customer[idx].cash -= mony;
+                    cout << "NEW BALANCE IN ACCOUNT NUMBER " << customer[idx].id << " IS = " << customer[idx].cash << endl;
+                    break;
+                }
+                else
+                {
+                    cout << "Your withdrawal amount is greater than your balance. Try again." << endl;
+                }
+            }
+            break;
+        default:
+            cout << "Invalid option." << endl;
+        }
+    }
+    else
+    {
+        cout << "Customer not found!" << endl;
+    }
+}
+
+void Banking::logout()
+{
+    cout << "Logging out..." << endl;
+    exit(0);
+}
+
+int main()
+{
+    string admin_name, admin_lname;
+    int pin, lpin;
+    cout << "\n\n\n\t\t\t\t\t\t BANK MANAGEMENT SYSTEM \n\n\n";
+    cout << "-----------------------------------------------------------------------------------------------------------------------";
+    cout << "\n\t\t\t\t\t\t SIGN UP\n";
+    cout << "Enter your name:" << endl;
+    cin >> admin_name;
+    cout << "Enter your pin: " << endl;
+    cin >> pin;
+    cout << "Your account is creating please wait";
+    for (int a = 0; a < 5; a++)
+    {
+        cout << ".";
+        Sleep(10);
+    }
+    cout << "\nYour account is created successfully";
+    system("CLS");
+
+    while (true)
+    {
+        cout << "\n\t\t\t\t\t\t LOGIN HERE\n";
+        cout << "Enter your Name: ";
+        cin >> admin_lname;
+        cout << "Enter your four digits pin: ";
+        cin >> lpin;
+        if (pin == lpin && admin_name == admin_lname)
+        {
+            system("CLS");
+            Banking customers;
+            customers.showoptions();
+            break;
+        }
+        else
+        {
+            cout << "Incorrect user name or password, please try again." << endl;
+        }
+    }
+    return 0;
+}
