@@ -1,0 +1,60 @@
+#include <iostream>
+
+using namespace std;
+
+class Account {
+public:
+    string accountNumber;
+    string name;
+    string cnic;
+    string phone;
+    string address;
+    double balance;
+
+    Account() {
+        accountNumber = "123456789";
+        name = " Miss Azka ";
+        cnic = "42101-1234567-8";
+        phone = "0300-1234567";
+        address = " Sialkot, Punjab , Pakistan";
+        balance = 2500000001.75;
+    }
+
+
+    void viewAccount() {
+        cout << "      Account Information     "<<endl;
+        cout << "Account Number : " << accountNumber << endl;
+        cout << "Name           : " << name << endl;
+        cout << "CNIC           : " << cnic << endl;
+        cout << "Phone          : " << phone << endl;
+        cout << "Address        : " << address << endl;
+        cout << "Balance        : $" << balance << endl<<endl;
+    }
+};
+
+int main() {
+    Account user;
+    int choice;
+
+    do {
+        cout << "         Bank Management System        "<<endl;
+        cout << "1. View Account"<<endl;
+        cout << "0. Exit"<<endl;
+        cout << "Enter your choice: ";
+        cin >> choice;
+        cout<<endl;
+
+        switch (choice) {
+            case 1:
+                user.viewAccount();
+                break;
+            case 0:
+                cout << "Thank you for using the Bank Management System."<<endl;
+                break;
+            default:
+                cout << "Invalid choice. Please try again."<<endl;
+        }
+    } while (choice != 0);
+
+    return 0;
+}
